@@ -30,6 +30,7 @@
  *  - Steering of L2 frames, interface based (sw interface)
  */
 
+#include <vat/vat.h>
 #include <vlib/vlib.h>
 #include <vnet/vnet.h>
 #include <vnet/srv6/sr.h>
@@ -420,7 +421,7 @@ sr_steer_policy_command_fn (vlib_main_t * vm, unformat_input_t * input,
   if (traffic_type == SR_STEER_IPV4)
     {
       u32 mask =
-	(dst_mask_width ? (0xFFFFFFFFu >> (32 - dst_mask_width)) : 0);
+	htonl(dst_mask_width ? (0xFFFFFFFFu << (32 - dst_mask_width)) : 0);
       prefix.ip4.as_u32 &= mask;
     }
   else if (traffic_type == SR_STEER_IPV6)
