@@ -111,15 +111,13 @@ add_del_neigh (ns_neigh_t * n, int is_del)
 
       memset (&a, 0, sizeof (a));
 
-      clib_memcpy (&a.ethernet, n->lladdr, ETHER_ADDR_LEN);
+      clib_memcpy (&a.mac, n->lladdr, ETHER_ADDR_LEN);
       clib_memcpy (&a.ip4, n->dst, sizeof (a.ip4));
-
 
       if (n->nd.ndm_state & NUD_REACHABLE)
         {
           vnet_arp_set_ip4_over_ethernet (vnet_main, sw_if_index,
-                                          &a, 0 /* static */ ,
-                                          0 /* no fib entry */);
+                                          &a, 0 /* flags */ );
 
         }
       else if (n->nd.ndm_state & NUD_FAILED)
@@ -132,9 +130,10 @@ add_del_neigh (ns_neigh_t * n, int is_del)
       if (n->nd.ndm_state & NUD_REACHABLE)
         {
           vnet_set_ip6_ethernet_neighbor (vm, sw_if_index,
-                                          (ip6_address_t *) n->dst, n->lladdr, ETHER_ADDR_LEN,
-                                          0 /* static */,
-                                          0 /* no fib entry */);
+                                          (ip6_address_t *) n->dst, 
+					  (const mac_address_t *)n->lladdr,
+					  // ETHER_ADDR_LEN, TODO: 本当にこれでいいのか怪しい
+                                          0 /* flags */ );
         }
       else
         vnet_unset_ip6_ethernet_neighbor (vm, sw_if_index,
