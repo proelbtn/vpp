@@ -106,3 +106,5 @@ GTAGS
 # No core files
 **/core
 
+
+/build-root/vpp_*_amd64.buildinfo
