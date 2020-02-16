@@ -24,6 +24,7 @@ $ sudo dpkg -i \
 
 ```
 $ cd build-root
+$ make netlink-install -j16
 $ make router-install -j16
 $ sudo cp install-native/netlink/lib64/librtnl.so /usr/lib/x86_64-linux-gnu/vpp_plugins/
 $ sudo cp install-native/router/lib64/router.so /usr/lib/x86_64-linux-gnu/vpp_plugins/
